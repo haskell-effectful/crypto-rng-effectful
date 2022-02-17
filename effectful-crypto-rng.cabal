@@ -69,8 +69,9 @@ library
     , base            <=4.17
     , bytestring
     , crypto-api
-    , crypto-rng
+    , crypto-rng      ^>=0.2
     , effectful-core
+    , random
 
 test-suite effectful-crypto-rng-test
   import:         common-extensions
@@ -78,9 +79,7 @@ test-suite effectful-crypto-rng-test
   import:         common-rts-options
   type:           exitcode-stdio-1.0
   main-is:        Main.hs
-  other-modules:
-    Utils
-
+  other-modules:  Utils
   hs-source-dirs: test
   build-depends:
     , base

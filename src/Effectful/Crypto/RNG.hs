@@ -39,6 +39,7 @@ import qualified Crypto.RNG as C
 import qualified Crypto.RNG.Utils as C
 import Control.Monad.IO.Class
 import Effectful.Dispatch.Dynamic
+import System.Random (UniformRange)
 
   -- CryptoRNG :: CryptoRNGState -> CryptoRNG m a
 
@@ -48,12 +49,14 @@ import Effectful.Dispatch.Dynamic
 data CryptoRNG :: Effect where
   RandomBytes :: ByteLength -> CryptoRNG m ByteString
   RandomString :: ByteLength -> String -> CryptoRNG m String
-  RandomR :: (Integral a) => (a, a) -> CryptoRNG m a
+  RandomR :: (UniformRange a) => (a, a) -> CryptoRNG m a
 
 -- | @since 0.0.1.0
 type instance DispatchOf CryptoRNG = 'Dynamic
 
 -- | The default Effect handler
+--
+--  @since 0.0.1.0
 runCryptoRNG :: forall (es :: [Effect]) (a :: Type)
                 . (IOE :> es)
                 => CryptoRNGState
@@ -65,23 +68,33 @@ runCryptoRNG rngState = interpret $ \_ -> \case
   RandomR (low, high) -> C.runCryptoRNGT rngState $ C.randomR (low, high)
 
 -- | Create a new 'CryptoRNGState', based on system entropy.
+--
+--  @since 0.0.1.0
 newCryptoRNGState :: IOE :> es => Eff es CryptoRNGState
 newCryptoRNGState = C.newCryptoRNGState
 
 -- | Create a new 'CryptoRNGState', based on a bytestring seed.
 -- Should only be used for testing.
-unsafeCryptoRNGState :: IOE :> es => ByteString -> Eff es CryptoRNGState
-unsafeCryptoRNGState seed = C.unsafeCryptoRNGState seed
+--
+--  @since 0.0.1.0
+unsafeCryptoRNGState :: IOE :> es => [ByteString] -> Eff es CryptoRNGState
+unsafeCryptoRNGState = C.unsafeCryptoRNGState
 
 -- | Generate given number of cryptographically secure random bytes.
+--
+--  @since 0.0.1.0
 randomBytes :: (CryptoRNG :> es) => ByteLength -> Eff es ByteString
 randomBytes len = send $ RandomBytes len
 
 -- | Generate random string of specified length that contains allowed chars.
+--
+--  @since 0.0.1.0
 randomString :: (CryptoRNG :> es) => Int -> String -> Eff es String
 randomString len allowedChars = send $ RandomString len allowedChars
 
 -- | Generate a cryptographically secure random number in given,
 -- closed range.
-randomR :: (CryptoRNG :> es, Integral a) => (a, a) -> Eff es a
+--
+--  @since 0.0.1.0
+randomR :: (CryptoRNG :> es, UniformRange a) => (a, a) -> Eff es a
 randomR = send . RandomR
