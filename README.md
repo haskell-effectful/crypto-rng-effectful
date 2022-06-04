@@ -1,50 +1,9 @@
-# effectful-crypto-rng
+# crypto-rng-effectful
 
-## Description
+[![Build Status](https://github.com/haskell-effectful/crypto-rng-effectful/workflows/Haskell-CI/badge.svg?branch=master)](https://github.com/haskell-effectful/crypto-rng-effectful/actions?query=branch%3Amaster)
+[![Hackage](https://img.shields.io/hackage/v/crypto-rng-effectful.svg)](https://hackage.haskell.org/package/crypto-rng-effectful)
+[![Dependencies](https://img.shields.io/hackage-deps/v/crypto-rng-effectful.svg)](https://packdeps.haskellers.com/feed?needle=andrzej@rybczak.net)
+[![Stackage LTS](https://www.stackage.org/package/crypto-rng-effectful/badge/lts)](https://www.stackage.org/lts/package/resource-teffectful)
+[![Stackage Nightly](https://www.stackage.org/package/crypto-rng-effectful/badge/nightly)](https://www.stackage.org/nightly/package/crypto-rng-effectful)
 
-A `CryptoRNG` effect for the [`effectful`][effectful] ecosystem.
-
-## How to use
-
-This library exposes the following elements:
-
-* `CryptoRNG` — The type-level effect that you can declare in your type signatures.
-
-example:
-```haskell
-generateUID :: (CryptoRNG :> es) => Eff es UID
-```
-
-* `randomR`, `randomBytes`, `randomString`
-Functions to get random data from the system's PRNG.
-
-```haskell
-
-newtype UID = UID ByteString
-  deriving newtype (Show, Eq, Ord)
-
-import Effectful.Crypto.RNG
-
-generateUID :: (CryptoRNG :> es ) => Eff es UID
-generateUID = do
-  bytes <- randomBytes 8
-  pure $ UID bytes
-```
-
-* Runner:
-
-```Haskell
-
-main :: IO ()
-main = runEff $ do
-  rng <- newCryptoRNGState
-  result <- runCryptoRNG rng
-            $ generateUID
-  liftIO $ print result
-
-```
-
-See the [tests][tests] to see an example use.
-
-[effectful]: https://github.com/haskell-effectful/effectful
-[tests]: https://github.com/Kleidukos/effectful-contrib/blob/main/effectful-crypto-rng/test/Main.hs
+Adaptation of the [crypto-rng](https://hackage.haskell.org/package/crypto-rng) library for the [effectful](https://hackage.haskell.org/package/effectful) ecosystem.
