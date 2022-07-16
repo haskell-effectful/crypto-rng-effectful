@@ -1,6 +1,7 @@
 module Main where
 
 import Control.Monad
+import Crypto.RNG
 import Data.ByteString
 import Effectful
 import Effectful.Reader.Static
@@ -19,11 +20,11 @@ main = do
 testRandomNumber :: Assertion
 testRandomNumber = runEff $ do
   cryptoState <- newCryptoRNGState
-  void $ runCryptoRNG cryptoState
-            . runReader ((10, 20) :: (Int, Int))
-            $ generatingRandomNumber
+  void . runCryptoRNG cryptoState
+       . runReader ((10, 20) :: (Int, Int))
+       $ generatingRandomNumber
 
-generatingRandomNumber :: (CryptoRNG :> es, Reader (Int, Int) :> es) => Eff es Int
+generatingRandomNumber :: (RNG :> es, Reader (Int, Int) :> es) => Eff es Int
 generatingRandomNumber = do
   bounds <- ask
   randomR bounds
@@ -38,7 +39,7 @@ testRandomBytes = runEff $ do
 newtype UID = UID ByteString
   deriving newtype (Show, Eq, Ord)
 
-generateUID :: (CryptoRNG :> es ) => Eff es UID
+generateUID :: RNG :> es => Eff es UID
 generateUID = do
   bytes <- randomBytes 8
   pure $ UID bytes

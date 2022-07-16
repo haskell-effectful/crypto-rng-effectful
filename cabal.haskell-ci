@@ -1,0 +1,5 @@
+branches:       master
+
+doctest:        <9.3
+tests:          True
+benchmarks:     True
