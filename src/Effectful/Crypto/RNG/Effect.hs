@@ -2,8 +2,7 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 module Effectful.Crypto.RNG.Effect where
 
-import Crypto.Classes
-import Data.ByteString
+import Data.ByteString (ByteString)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import System.Random
@@ -11,7 +10,7 @@ import Crypto.RNG.Class
 
 -- | Provide the ability to generate random numbers.
 data RNG :: Effect where
-  RandomBytes :: ByteLength -> RNG m ByteString
+  RandomBytes :: Int -> RNG m ByteString
   Random      :: Uniform a => RNG m a
   RandomR     :: UniformRange a => (a, a) -> RNG m a
 

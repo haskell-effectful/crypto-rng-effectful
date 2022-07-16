@@ -53,9 +53,8 @@ common language
 library
   import:          language
 
-  build-depends:     base            >= 4.13      && < 5
-                   , bytestring
-                   , crypto-api
+  build-depends:     base            >= 4.13       && < 5
+                   , bytestring      >= 0.10.8
                    , crypto-rng      >= 0.3        && < 0.4
                    , effectful-core  >= 1.0.0.0    && < 1.0.1.0
                    , random          >= 1.1        && < 1.3
