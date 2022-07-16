@@ -1,4 +1,2 @@
-# CHANGELOG
-
-## v0.0.1.0 –
-* Release
+# crypto-rng-effectful-1.0.0.0 (2022-07-16)
+* Initial release.
