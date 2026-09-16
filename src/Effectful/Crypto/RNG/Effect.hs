@@ -2,11 +2,11 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 module Effectful.Crypto.RNG.Effect where
 
+import Crypto.RNG.Class
 import Data.ByteString (ByteString)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import System.Random
-import Crypto.RNG.Class
 
 -- | Provide the ability to generate random numbers.
 data RNG :: Effect where
