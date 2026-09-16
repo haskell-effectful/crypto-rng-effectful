@@ -15,7 +15,7 @@ module Effectful.Crypto.RNG.Unsafe
 import Crypto.RNG.Unsafe
 import Effectful
 import Effectful.Dispatch.Dynamic
-import qualified System.Random as R
+import System.Random qualified as R
 
 import Effectful.Crypto.RNG.Effect
 

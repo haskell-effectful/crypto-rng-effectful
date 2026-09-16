@@ -17,7 +17,7 @@ import Control.Monad.IO.Class
 import Crypto.RNG
 import Effectful
 import Effectful.Dispatch.Dynamic
-import qualified System.Random.Stateful as R
+import System.Random.Stateful qualified as R
 
 import Effectful.Crypto.RNG.Effect
 
