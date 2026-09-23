@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 -- | Generation of random numbers via "Crypto.RNG.Unsafe".
 module Effectful.Crypto.RNG.Unsafe
   ( -- * Effect
@@ -25,6 +26,10 @@ import Effectful.Crypto.RNG.Effect
 -- cryptographically secure and should only be used for testing purposes.
 runRNG :: IOE :> es => RNGState -> Eff (RNG : es) a -> Eff es a
 runRNG rng = interpret $ \_ -> \case
+#if MIN_VERSION_random(1,3,0)
+  RandomBytes n  -> withRNG rng $ \g -> R.uniformByteString n g
+#else
   RandomBytes n  -> withRNG rng $ \g -> R.genByteString n g
+#endif
   Random         -> withRNG rng $ \g -> R.uniform g
   RandomR bounds -> withRNG rng $ \g -> R.uniformR bounds g
