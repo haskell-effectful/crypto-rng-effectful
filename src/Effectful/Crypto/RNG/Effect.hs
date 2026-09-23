@@ -1,5 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
+
 module Effectful.Crypto.RNG.Effect where
 
 import Crypto.RNG.Class
@@ -11,12 +12,12 @@ import System.Random
 -- | Provide the ability to generate random numbers.
 data RNG :: Effect where
   RandomBytes :: Int -> RNG m ByteString
-  Random      :: Uniform a => RNG m a
-  RandomR     :: UniformRange a => (a, a) -> RNG m a
+  Random :: Uniform a => RNG m a
+  RandomR :: UniformRange a => (a, a) -> RNG m a
 
 type instance DispatchOf RNG = 'Dynamic
 
 instance RNG :> es => CryptoRNG (Eff es) where
   randomBytes = send . RandomBytes
-  random      = send Random
-  randomR     = send . RandomR
+  random = send Random
+  randomR = send . RandomR

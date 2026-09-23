@@ -1,9 +1,10 @@
 {-# LANGUAGE CPP #-}
+
 -- | Generation of random numbers via "Crypto.RNG.Unsafe".
 module Effectful.Crypto.RNG.Unsafe
   ( -- * Effect
-    RNG(..)
-  , CryptoRNG(..)
+    RNG (..)
+  , CryptoRNG (..)
 
     -- ** Handlers
   , runRNG
@@ -14,6 +15,7 @@ module Effectful.Crypto.RNG.Unsafe
   ) where
 
 import Crypto.RNG.Unsafe
+import Data.ByteString qualified as BS
 import Effectful
 import Effectful.Dispatch.Dynamic
 import System.Random qualified as R
@@ -26,10 +28,15 @@ import Effectful.Crypto.RNG.Effect
 -- cryptographically secure and should only be used for testing purposes.
 runRNG :: IOE :> es => RNGState -> Eff (RNG : es) a -> Eff es a
 runRNG rng = interpret $ \_ -> \case
-#if MIN_VERSION_random(1,3,0)
-  RandomBytes n  -> withRNG rng $ \g -> R.uniformByteString n g
-#else
-  RandomBytes n  -> withRNG rng $ \g -> R.genByteString n g
-#endif
-  Random         -> withRNG rng $ \g -> R.uniform g
+  RandomBytes n -> withRNG rng $ \g -> uniformByteString n g
+  Random -> withRNG rng $ \g -> R.uniform g
   RandomR bounds -> withRNG rng $ \g -> R.uniformR bounds g
+
+-- A top-level binding, because fourmolu formats the code between CPP
+-- directives separately.
+uniformByteString :: R.RandomGen g => Int -> g -> (BS.ByteString, g)
+#if MIN_VERSION_random(1,3,0)
+uniformByteString = R.uniformByteString
+#else
+uniformByteString = R.genByteString
+#endif
