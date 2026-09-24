@@ -1,8 +1,8 @@
 -- | Generation of random numbers via "Crypto.RNG".
 module Effectful.Crypto.RNG
   ( -- * Effect
-    RNG(..)
-  , CryptoRNG(..)
+    RNG (..)
+  , CryptoRNG (..)
 
     -- ** Handlers
   , runCryptoRNG
@@ -24,6 +24,6 @@ import Effectful.Crypto.RNG.Effect
 -- | Generate cryptographically secure random numbers.
 runCryptoRNG :: IOE :> es => CryptoRNGState -> Eff (RNG : es) a -> Eff es a
 runCryptoRNG rng = interpret $ \_ -> \case
-  RandomBytes n  -> liftIO $ randomBytesIO n rng
-  Random         -> liftIO $ R.uniformM rng
+  RandomBytes n -> liftIO $ randomBytesIO n rng
+  Random -> liftIO $ R.uniformM rng
   RandomR bounds -> liftIO $ R.uniformRM bounds rng

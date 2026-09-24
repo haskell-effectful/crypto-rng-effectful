@@ -12,17 +12,20 @@ import Effectful.Crypto.RNG
 
 main :: IO ()
 main = do
-  defaultMain $ testGroup "Crypto-RNG Bindings"
-    [ testCase "Genering random bytes wrapped in a newtype" testRandomBytes
-    , testCase "Generating a random number within a range from Reader" testRandomNumber
-    ]
+  defaultMain $
+    testGroup
+      "Crypto-RNG Bindings"
+      [ testCase "Genering random bytes wrapped in a newtype" testRandomBytes
+      , testCase "Generating a random number within a range from Reader" testRandomNumber
+      ]
 
 testRandomNumber :: Assertion
 testRandomNumber = runEff $ do
   cryptoState <- newCryptoRNGState
-  void . runCryptoRNG cryptoState
-       . runReader ((10, 20) :: (Int, Int))
-       $ generatingRandomNumber
+  void
+    . runCryptoRNG cryptoState
+    . runReader ((10, 20) :: (Int, Int))
+    $ generatingRandomNumber
 
 generatingRandomNumber :: (RNG :> es, Reader (Int, Int) :> es) => Eff es Int
 generatingRandomNumber = do

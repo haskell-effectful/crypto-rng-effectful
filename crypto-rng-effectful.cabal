@@ -17,7 +17,7 @@ homepage:           https://github.com/haskell-effectful/crypto-rng-effectful
 extra-doc-files:    CHANGELOG.md
                   , README.md
 
-tested-with: GHC == { 8.10.7, 9.0.2, 9.2.8, 9.4.8, 9.6.7, 9.8.4, 9.10.3, 9.12.4, 9.14.1 }
+tested-with: GHC ^>= { 8.10, 9.0, 9.2, 9.4, 9.6, 9.8, 9.10, 9.12, 9.14 }
 
 bug-reports: https://github.com/haskell-effectful/crypto-rng-effectful/issues
 source-repository head
@@ -48,7 +48,7 @@ library
   build-depends:     base            >= 4.14       && < 5
                    , bytestring      >= 0.10.8
                    , crypto-rng      >= 0.3        && < 0.4
-                   , effectful-core  >= 1.0.0.0    && < 3.0.0.0
+                   , effectful-core  >= 1.0.0.0    && < 3
                    , random          >= 1.2        && < 1.4
 
   hs-source-dirs:  src
